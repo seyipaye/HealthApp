@@ -118,7 +118,7 @@ public class SignupFragment extends DialogFragment implements View.OnClickListen
             case R.id.skipButton:
                 removeSignup(true);
                 break;
-        };
+        }
     }
 
     private void showLogin() {
@@ -216,5 +216,6 @@ public class SignupFragment extends DialogFragment implements View.OnClickListen
         Log.i(TAG, "onAuthFailure: " + message);
         binding.progressRing.setVisibility(View.GONE);
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        authViewModel.forgetSelectedGoogleAccount();
     }
 }

@@ -173,6 +173,7 @@ public class LoginFragment extends DialogFragment implements View.OnClickListene
 
     @Override
     public void onAuthFailure(String message) {
+        authViewModel.forgetSelectedGoogleAccount();
         binding.progressRing.setVisibility(View.GONE);
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
         Log.i(TAG, "onAuthFailure: " + message);

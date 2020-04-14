@@ -29,6 +29,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 public class AuthViewModel extends AndroidViewModel implements AuthResponse {
     private static final int LOGIN_REQUEST_CODE = 101;
@@ -154,7 +155,6 @@ public class AuthViewModel extends AndroidViewModel implements AuthResponse {
 
         if (requestCode == LOGIN_REQUEST_CODE || requestCode == SIGNUP_REQUEST_CODE) {
 
-            // Try to get last sign in
             Task<GoogleSignInAccount> completedTask = GoogleSignIn.getSignedInAccountFromIntent(data);
 
             try {
@@ -162,11 +162,29 @@ public class AuthViewModel extends AndroidViewModel implements AuthResponse {
                 authenticateInAPI(account, requestCode);
             } catch (ApiException e) {
                 Log.w(TAG, "signInResult:failed code=" + e.getStatusCode() + "\nMessage:" + e.getLocalizedMessage());
-                if (requestCode == LOGIN_REQUEST_CODE)
-                loginListener.onAuthFailure("signInResult:failed code=" + e.getStatusCode() + "\nMessage:" + e);
-                else
-                    signupListener.onFailure("signInResult:failed code=" + e.getStatusCode() + "\nMessage:" + e);
+                String errorMessage;
+                if (e.getStatusCode() == 12501) {
+                    errorMessage = "Oops, Couldn't retrieve Google account";
+                } else {
+                    errorMessage = "signInResult:failed code=" + e.getStatusCode() + "\nMessage:" + e.getMessage();
+                }
+                if (requestCode == LOGIN_REQUEST_CODE) {
+                    loginListener.onAuthFailure(errorMessage);
+                } else {
+                    signupListener.onFailure(errorMessage);
+                }
             }
+        }
+    }
+
+    public void forgetSelectedGoogleAccount() {
+
+        try {
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build();
+            GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
+            mGoogleSignInClient.signOut();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
