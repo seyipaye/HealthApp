@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentBottom="true"
+    android:background="@color/colorScreenBackground"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/fragment_top_padding">
+
+    <LinearLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:background="@android:drawable/list_selector_background"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:fontFamily="@font/nunito_bold"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="6sp"
+            android:lines="1"
+            android:text="Profile"
+            android:textAppearance="@style/search_firs" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/more"
+                style="@android:style/Widget.Holo.ImageButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="More"
+                android:src="@drawable/ic_more_vert_black_24dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/appBar"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="-2dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:fillViewport="false"
+        android:scrollbarSize="0dp"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_gravity="center"
+                android:layout_margin="16dp">
+
+                <ImageView
+                    android:id="@+id/avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_account_circle_black_24dp" />
+
+                <com.github.ybq.android.spinkit.SpinKitView
+                    android:id="@+id/avatar_spin_kit"
+                    style="@style/SpinKitView.Small.ChasingDots"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    app:SpinKit_Color="@color/colorPrimaryDark" />
+
+                <ImageButton
+                    android:id="@+id/edit_avatar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="bottom|end"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_avatar_edit" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/nameLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:gravity="center|center_vertical"
+                android:lineSpacingExtra="6sp"
+                android:lines="1"
+                android:text="@string/click_here"
+                android:textAppearance="@style/search_firs"
+                android:textSize="24sp"
+                tools:text="Sopeju Aliyu" />
+
+            <TextView
+                android:id="@+id/emailLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:gravity="center"
+                android:textSize="14sp"
+                tools:text="sheaboy66@gmail.com" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/UserTextLayout"
+                android:layout_marginTop="24dp"
+                android:hint="MATRIC NUMBER"
+                app:endIconDrawable="@drawable/ic_edit_pencil"
+                app:endIconMode="custom">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/matricNoEntry"
+                    style="@style/UserTextLayoutEditText"
+                    android:inputType="number"
+                    android:maxLength="8" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/UserTextLayout"
+                android:hint="MOBILE NUMBER"
+                app:endIconDrawable="@drawable/ic_edit_pencil"
+                app:endIconMode="custom">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/mobileNoEntry"
+                    style="@style/UserTextLayoutEditText"
+                    android:inputType="phone"
+                    android:maxLength="11"
+                    tools:text="0812345678" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/roboto"
+                android:hint="DEPARTMENT">
+
+                <AutoCompleteTextView
+                    android:id="@+id/departmentEntry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="MTE" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/UserTextLayout"
+                app:endIconDrawable="@drawable/ic_edit_pencil"
+                app:endIconMode="custom">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/clinicNoEntry"
+                    style="@style/UserTextLayoutEditText"
+                    android:hint="CLINIC NUMBER"
+                    android:inputType="textCapCharacters"
+                    android:maxLength="8"
+                    tools:text="STO55013" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/UserTextLayout"
+                app:endIconDrawable="@drawable/ic_edit_pencil"
+                app:endIconMode="custom">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/lastVisitEntry"
+                    style="@style/UserTextLayoutEditText"
+                    android:hint="LAST VISIT"
+                    android:inputType="textCapWords"
+                    tools:text="No Visit yet" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/update_button"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp"
+                android:text="Update"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="220dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/verifyNotif"
+        tools:visibility="visible"
+        android:visibility="gone"
+        android:layout_height="50dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:layout_marginBottom="12dp"
+        android:background="@color/notifColor"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="Account yet to be verified"
+            android:textSize="16sp"
+            android:fontFamily="@font/roboto"
+            android:textColor="@color/colorAccent" />
+
+        <Button
+            android:id="@+id/verifyBtn"
+            style="@android:style/Widget.DeviceDefault.Button.Borderless"
+            android:layout_width="92dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_weight="0"
+            android:backgroundTint="@color/colorAccent"
+            android:text="Verify"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryDark"
+            app:cornerRadius="13dp" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/progress_ring"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/appBar"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_progress_ring"
+        android:onClick="onProgressBgClicked"
+        android:visibility="gone"
+        tools:ignore="OnClick"
+        tools:visibility="gone">
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/spin_kit"
+            style="@style/SpinKitView.ThreeBounce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:SpinKit_Color="@color/colorPrimary" />
+
+    </FrameLayout>
+</RelativeLayout>

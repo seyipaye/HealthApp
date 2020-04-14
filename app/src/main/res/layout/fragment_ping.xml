@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentBottom="true"
+    android:background="@color/colorScreenBackground"
+    android:orientation="vertical"
+    android:paddingStart="16dp"
+    android:paddingTop="@dimen/fragment_top_padding"
+    android:paddingEnd="16dp"
+    tools:context=".ui.ping.PingFragment">
+
+    <TextView
+        android:id="@+id/body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nunito_bold"
+        android:gravity="center_vertical"
+        android:lineSpacingExtra="6sp"
+        android:lines="1"
+        android:text="Ping"
+        android:textAppearance="@style/search_firs" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/body"
+        android:fillViewport="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="24dp"
+        android:scrollbarSize="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:clipToPadding="false"
+                app:cardCornerRadius="5dp"
+                app:cardUseCompatPadding="true"
+                app:contentPadding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/pingEntryLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto"
+                            android:gravity="center_vertical"
+                            android:lineSpacingExtra="6sp"
+                            android:paddingTop="8dp"
+                            android:text="Send a ping to them at the health centre with your message. They get notified immediately you ping them"
+                            android:textSize="16sp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:fontFamily="@font/roboto"
+                            android:hint="Type your message here"
+                            app:boxBackgroundMode="none"
+                            app:counterEnabled="true"
+                            app:counterMaxLength="250">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/messageEntry"
+                                style="@style/UserTextLayoutEditText"
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:inputType="textMultiLine|textImeMultiLine"
+                                android:maxLines="5"
+                                android:minHeight="100dp"
+                                android:paddingStart="0dp"
+                                android:paddingLeft="0dp"
+                                android:paddingEnd="0dp"
+                                android:paddingRight="0dp"
+                                tools:text="My test message" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <View
+                            android:id="@+id/divider"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="?android:attr/listDivider" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/awaitingResponseTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:gravity="center"
+                        android:lineSpacingExtra="6sp"
+                        android:text="Awaiting response..."
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/sendPingBtn"
+                        style="@style/generic_button"
+                        android:layout_marginTop="16dp"
+                        android:text="Send Ping" />
+
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:layout_weight="0"
+                android:clipToPadding="false"
+                app:cardCornerRadius="5dp"
+                app:cardUseCompatPadding="true"
+                app:contentPadding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto"
+                        android:gravity="center_vertical"
+                        android:lineSpacingExtra="6sp"
+                        android:paddingTop="8dp"
+                        android:text="You should onle call for ambulance in case of emergency alone"
+                        android:textSize="16sp" />
+
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/callAmbulanceBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:hapticFeedbackEnabled="false"
+                        app:cardBackgroundColor="@null"
+                        app:cardCornerRadius="5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/green_ring_selector"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0"
+                                android:fontFamily="@font/roboto"
+                                android:gravity="center"
+                                android:text="Call for ambulance"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="16sp" />
+
+                            <ImageButton
+                                android:id="@+id/cancel_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="45dp"
+                                android:layout_marginStart="22dp"
+                                android:layout_weight="0"
+                                android:background="@null"
+                                android:src="@drawable/ic_ambulance"
+                                android:tint="@color/colorPrimary" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </ScrollView>
+</RelativeLayout>

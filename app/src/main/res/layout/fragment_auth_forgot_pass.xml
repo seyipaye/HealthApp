@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".ui.auth.OtpFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="16dp"
+        android:paddingTop="@dimen/fragment_top_padding"
+        android:paddingEnd="16dp">
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="-15dp"
+            android:background="@null"
+            android:src="@drawable/ic_back"
+            android:tint="@color/colorPrimaryDark" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/backButton"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/roboto"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:text="Forgot Password?"
+            android:textAppearance="@style/search_firs"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/sub_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_alignEnd="@+id/title"
+            android:fontFamily="@font/roboto"
+            android:paddingTop="8dp"
+            android:text="Please type in your email. \nWe will send you a link to reset the password"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sub_title"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="-8dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/UserTextLayout"
+                app:boxBackgroundMode="filled">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emailEntry"
+                    style="@style/UserEditText"
+                    android:drawableEnd="@null"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    tools:text="Seyi@ipaye.com" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/submitBtn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/roboto"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="Submit"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                app:cornerRadius="5dp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/progress_ring"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_progress_ring"
+        android:onClick="onProgressBgClicked"
+        tools:ignore="OnClick">
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/spin_kit"
+            style="@style/SpinKitView.ThreeBounce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:SpinKit_Color="@color/colorPrimary" />
+
+    </FrameLayout>
+</FrameLayout>

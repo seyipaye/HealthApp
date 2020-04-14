@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_ping_history"
+        android:title="@string/ping_history" />
+    <item android:id="@+id/menu_chg_password"
+        android:title="@string/change_password" />
+    <item android:id="@+id/menu_logOut"
+        android:title="@string/log_out" />
+    <item android:id="@+id/menu_login"
+        android:title="@string/log_in" />
+    <item android:id="@+id/menu_verify_account"
+        android:title="@string/verify_account" />
+</menu>

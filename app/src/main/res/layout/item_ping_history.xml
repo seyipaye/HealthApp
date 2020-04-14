@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    style="@style/TipItemCard"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        style="@style/TipItemLayout">
+
+        <TextView
+            android:id="@+id/ping_header"
+            tools:text="October 26, 2019 2:46 AM"
+            style="@style/TipItemHeader"/>
+
+        <TextView
+            android:id="@+id/ping_body"
+            style="@style/TipItembody"
+            tools:text="@string/sampleFirstAidBody" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

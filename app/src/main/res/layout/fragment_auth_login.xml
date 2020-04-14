@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".ui.auth.LoginFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="16dp"
+        android:paddingTop="@dimen/fragment_top_padding"
+        android:paddingEnd="16dp">
+
+    <ImageButton
+        android:id="@+id/cancel_button"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="-15dp"
+        android:background="@null"
+        android:src="@drawable/ic_cancel"
+        android:tint="@color/colorPrimaryDark" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cancel_button"
+        android:fontFamily="@font/roboto"
+        android:gravity="center_vertical"
+        android:lines="1"
+        android:text="Login"
+        android:textAppearance="@style/search_firs"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottom_or"
+        android:layout_below="@+id/title"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/UserTextLayout"
+            app:boxBackgroundMode="filled">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailEntry"
+                style="@style/UserEditText"
+                android:drawableEnd="@null"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                tools:text="Seyi@ipaye.com" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/UserTextLayout"
+            app:boxBackgroundMode="filled"
+            app:endIconMode="password_toggle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordEntry"
+                style="@style/UserEditText"
+                android:drawableEnd="@null"
+                android:hint="Password"
+                android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/loginButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="39dp"
+            android:fontFamily="@font/roboto"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="Login"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            app:cornerRadius="5dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/forgotPassButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forgot Password"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="14dp"
+            android:fontFamily="@font/roboto"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:textAllCaps="false"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/signupText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="14dp"
+            android:padding="10dp"
+            android:lineSpacingExtra="2sp"
+            android:text="@string/dont_have_an_account"
+            android:textAppearance="@style/text_view_style"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_or"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/googleLoginButton"
+        android:layout_marginBottom="24dp"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:textAppearance="@style/text_view_style"
+            android:paddingStart="26.5dp"
+            android:paddingEnd="26.5dp"
+            android:text="OR"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="?android:attr/listDivider" />
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/googleLoginButton"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="32dp"
+        app:cardBackgroundColor="@color/login_google_background"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="1dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:drawableStart="@drawable/ic_google"
+            android:drawablePadding="16dp"
+            android:fontFamily="@font/nunito_semibold"
+            android:gravity="center"
+            android:text="Login with Google"
+            android:textColor="#BDBDBD"
+            android:textSize="16sp" />
+    </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/progress_ring"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_progress_ring"
+        android:onClick="onProgressBgClicked"
+        tools:ignore="OnClick">
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/spin_kit"
+            style="@style/SpinKitView.ThreeBounce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:SpinKit_Color="@color/colorPrimary" />
+
+    </FrameLayout>
+</FrameLayout>

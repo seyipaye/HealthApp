@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Health App</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="first_aid">First Aid</string>
+    <string name="profile">Profile</string>
+    <string name="search">Search</string>
+    <string name="search_first_aid">Search first aid</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="sampleFirstAidBody">Headaches can be more complicated than most people realize. Different kinds can have their own set of symptoms, happen for unique reasons, and need different treatments.\n\n Once you know the type of headache you have.
+</string>
+    <string name="noTip">No Tip yet</string>
+    <string name="sampleFirstAidTitle">Headaches: Causes, types, and treatment</string>
+    <string name="sample_practitioner_name">Dr. Gregory Murphy</string>
+    <string name="sample_practitioner_field">Chemical physicist</string>
+    <string name="click_here">Click here to? <font fgcolor='#09A5DB'>Login</font></string>
+    <string name="already_have_an_account">Already have an account? <font fgcolor='#09A5DB'>Login</font></string>
+    <string name="dont_have_an_account">Don\'t have an account? <font fgcolor='#09A5DB'>Signup</font></string>
+    <string name="log_in">Log in</string>
+    <string name="log_out">Log out</string>
+    <string name="change_password">Change password</string>
+    <string name="ping_history">View ping history</string>
+    <string name="verify_account">Verify Account</string>
+    <string name="welcome_title">Health centre on \n your device</string>
+
+</resources>

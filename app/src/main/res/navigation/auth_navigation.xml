@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/auth_navigation"
+    app:startDestination="@id/welcomeFragment">
+
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.breezytechdevelopers.healthapp.ui.auth.WelcomeFragment"
+        android:label="WelcomeFragment"
+        tools:layout="@layout/fragment_auth_welcome" >
+        <action
+            android:id="@+id/action_welcomeFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down"/>
+        <action
+            android:id="@+id/action_welcomeFragment_to_signupFragment"
+            app:destination="@id/signupFragment"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down"/>
+        <action
+            android:id="@+id/action_welcomeFragment_to_otpFragment"
+            app:destination="@id/otpFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_chgPassFragment"
+            app:destination="@id/chgPassFragment"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down"/>
+        <action
+            android:id="@+id/action_welcomeFragment_to_pingHistoryFragment"
+            app:destination="@id/pingHistoryFragment"
+            app:popUpTo="@id/pingHistoryFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.breezytechdevelopers.healthapp.ui.auth.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_auth_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_signupFragment"
+            app:destination="@id/signupFragment"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down"
+            app:popUpTo="@id/welcomeFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_loginFragment_to_forgotPassFragment"
+            app:destination="@id/forgotPassFragment"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupFragment"
+        android:name="com.breezytechdevelopers.healthapp.ui.auth.SignupFragment"
+        android:label="fragment_signup"
+        tools:layout="@layout/fragment_auth_signup" >
+        <action
+            android:id="@+id/action_signupFragment_to_otpFragment"
+            app:destination="@id/otpFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_signupFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/welcomeFragment"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down"/>
+        <argument
+            android:name="signUpWithGoogle"
+            app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/otpFragment"
+        android:name="com.breezytechdevelopers.healthapp.ui.auth.OtpFragment"
+        android:label="fragment_auth_otp"
+        tools:layout="@layout/fragment_auth_otp" >
+        <argument
+            android:name="user"
+            app:argType="com.breezytechdevelopers.healthapp.database.entities.User"
+            app:nullable="true" />
+        <argument
+            android:name="motive"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_otpFragment_to_chgPassFragment"
+            app:destination="@id/chgPassFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/forgotPassFragment"
+        android:name="com.breezytechdevelopers.healthapp.ui.auth.ForgotPassFragment"
+        android:label="ForgotPassFragment"
+        tools:layout="@layout/fragment_auth_forgot_pass" >
+        <argument
+            android:name="email"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_forgotPassFragment_to_otpFragment"
+            app:destination="@id/otpFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/chgPassFragment"
+        android:name="com.breezytechdevelopers.healthapp.ui.auth.ChgPassFragment"
+        android:label="ChgPassFragment"
+        tools:layout="@layout/fragment_auth_chg_pass" >
+        <argument
+            android:name="user"
+            app:argType="com.breezytechdevelopers.healthapp.database.entities.User"
+            app:nullable="true" />
+        <argument
+            android:name="motive"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_chgPassFragment_to_otpFragment"
+            app:destination="@id/otpFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/pingHistoryFragment"
+        android:name="com.breezytechdevelopers.healthapp.ui.auth.PingHistoryFragment"
+        android:label="pingHistoryFragment"
+        tools:layout="@layout/fragment_ping_history" />
+</navigation>

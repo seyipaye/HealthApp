@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorScreenBackground"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/fragment_top_padding"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"
+        android:background="@color/colorAccent"
+        android:id="@+id/header">
+    <TextView
+        android:id="@+id/title1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/first_aid"
+        android:fontFamily="@font/nunito_bold"
+        android:gravity="center_vertical"
+        android:lineSpacingExtra="6sp"
+        android:textAppearance="@style/search_firs" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/searchCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:focusable="true"
+        app:cardBackgroundColor="@color/colorScreenBackground"
+        android:focusableInTouchMode="true"
+        app:cardCornerRadius="8dp"
+        app:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <AutoCompleteTextView
+                android:id="@+id/first_aid_search_input"
+                style="@style/search_firs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:drawableStart="@drawable/ic_search_ash_24dp"
+                android:drawablePadding="8dp"
+                android:focusedByDefault="false"
+                android:hint="@string/search_first_aid"
+                android:inputType="textAutoComplete"
+                android:lines="1"
+                android:padding="8dp"
+                android:textAppearance="@style/search_firs"
+                android:textSize="14sp" />
+
+            <ImageButton
+                android:id="@+id/search_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_alignParentEnd="true"
+                android:background="@color/colorScreenBackground"
+                android:src="@drawable/ic_arrow_forward_black_24dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/header">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp">
+
+            <TextView
+                android:id="@+id/resultCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingStart="4dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:textAppearance="@style/text_view_style"
+                android:textColor="@color/first_aid_item_body"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:text="250 results"
+                tools:visibility="visible" />
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                android:id="@+id/progress_bar"
+                style="@style/SpinKitView.RotatingCircle"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                tools:visibility="visible"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                app:SpinKit_Color="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/advancedSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="end"
+                android:maxLines="1"
+                android:paddingTop="12dp"
+                android:paddingEnd="4dp"
+                android:paddingBottom="12dp"
+                android:text="Advanced Search"
+                android:textAppearance="@style/text_view_style"
+                android:textColor="@color/first_aid_item_body"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/first_aid_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:background="#008A8181"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_first_aid" />
+    </LinearLayout>
+
+</RelativeLayout>

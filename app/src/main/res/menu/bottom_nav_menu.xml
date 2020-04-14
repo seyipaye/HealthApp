@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_first_aid"
+        android:icon="@drawable/ic_first_aid_kit"
+        android:title="@string/first_aid" />
+
+    <item
+        android:id="@+id/navigation_ping"
+        android:icon="@null"
+        android:title=""
+        android:checkable="false"/>
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_user"
+        android:title="@string/profile" />
+
+</menu>
