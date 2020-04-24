@@ -145,7 +145,9 @@ public class AuthViewModel extends AndroidViewModel implements AuthResponse {
             return;
         }
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityModel.setValue(new StartActivityModel(signInIntent, requestCode));
@@ -159,9 +161,10 @@ public class AuthViewModel extends AndroidViewModel implements AuthResponse {
 
             try {
                 GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+                Log.i(TAG, "onAuthActivityResult: What");
                 authenticateInAPI(account, requestCode);
             } catch (ApiException e) {
-                Log.w(TAG, "signInResult:failed code=" + e.getStatusCode() + "\nMessage:" + e.getLocalizedMessage());
+                Log.w(TAG, "signInResult:failed code=" + e.getStatusCode() + "\nMessage:" + e);
                 String errorMessage;
                 if (e.getStatusCode() == 12501) {
                     errorMessage = "Oops, Couldn't retrieve Google account";
@@ -189,13 +192,17 @@ public class AuthViewModel extends AndroidViewModel implements AuthResponse {
     }
 
     private void authenticateInAPI(GoogleSignInAccount account, int requestCode) {
-        Log.i(TAG, "authenticateInAPI: " + account.getId());
+        Log.i(TAG, "authenticateInAPI: " + account.getId() +
+                account.getEmail() +
+                account.getGivenName() +
+                account.getFamilyName());
+
         switch (requestCode) {
             case LOGIN_REQUEST_CODE:
                 login(new User(account.getEmail(), account.getId()), loginListener);
                 break;
             case SIGNUP_REQUEST_CODE:
-                signup(new User(account.getEmail(), account.getId(), account.getGivenName(), account.getFamilyName()), signupListener);
+                signup(new User(account.getEmail(),account.getId(), account.getGivenName(), account.getFamilyName()), signupListener);
                 break;
         }
     }

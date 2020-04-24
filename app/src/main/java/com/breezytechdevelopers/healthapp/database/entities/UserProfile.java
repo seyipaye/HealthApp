@@ -99,17 +99,19 @@ public class UserProfile {
     }
 
     public String getFreshTime() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT +1"));
-        Date date = null;
-        try {
-            date = simpleDateFormat.parse(last_login.replace("T", " "));
-            SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("MMMM dd, yyyy h:mm a", Locale.ENGLISH);
-            return simpleDateFormat2.format(date);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return last_login;
+        if (last_login != null) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT +1"));
+            Date date = null;
+            try {
+                date = simpleDateFormat.parse(last_login.replace("T", " "));
+                SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("MMMM dd, yyyy h:mm a", Locale.ENGLISH);
+                return simpleDateFormat2.format(date);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+        return last_login;
     }
 
     public void setDepartment(String department) {

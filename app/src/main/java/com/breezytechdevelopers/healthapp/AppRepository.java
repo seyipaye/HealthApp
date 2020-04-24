@@ -146,7 +146,7 @@ public class AppRepository extends SafeAPIRequest {
                             saveUserProfile(response.body().getData());
                             Log.i(TAG, "fetchUserProfile: " + response.body().getSuccess());
                         } else {
-                            listener.onFetchFailure(getError( "fetchUserProfile", response.errorBody()));
+                            Toast.makeText(context, getError( "fetchUserProfile", response.errorBody()), Toast.LENGTH_SHORT).show();
                         }
                     }
 

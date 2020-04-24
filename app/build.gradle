@@ -3,6 +3,14 @@ apply plugin: "androidx.navigation.safeargs"
 apply plugin: 'com.google.gms.google-services'
 
 android {
+    signingConfigs {
+        Config {
+            storeFile file('/Users/mac/Downloads/HealthApp/Key/Untitled')
+            storePassword 'Seyifunmi'
+            keyAlias = 'key0'
+            keyPassword 'Seyifunmi'
+        }
+    }
     compileSdkVersion 28
     buildToolsVersion '29.0.1'
     defaultConfig {
@@ -17,6 +25,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.Config
         }
     }
     compileOptions {
@@ -52,7 +61,8 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
 
     // Others
-    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.firebase:firebase-auth:19.3.0'
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
     implementation 'com.alimuzaffar.lib:pinentryedittext:2.0.6'
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     implementation 'com.google.firebase:firebase-storage:19.1.1'
