@@ -2,14 +2,19 @@ package com.breezytechdevelopers.healthapp.ui.fullscreen;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.lifecycle.MutableLiveData;
 
 import com.breezytechdevelopers.healthapp.R;
 import com.breezytechdevelopers.healthapp.database.entities.Message;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +24,11 @@ public class PingChatListViewAdapter extends BaseAdapter {
 
     List<Message> messages = new ArrayList<Message>();
     Context context;
+    private MutableLiveData<Bitmap> mutableAvatar;
 
-    public PingChatListViewAdapter(Context context) {
+    public PingChatListViewAdapter(Context context, MutableLiveData<Bitmap> mutableAvatar) {
         this.context = context;
+        this.mutableAvatar = mutableAvatar;
     }
 
     // This is the backbone of the class, it handles the creation of single ListView row (chat bubble)
@@ -33,14 +40,24 @@ public class PingChatListViewAdapter extends BaseAdapter {
 
         if (message.isForUser()) { // this message was sent by us so let's create a basic chat bubble on the right
             convertView = messageInflater.inflate(R.layout.item_chat_sent, null);
+            holder.avatar = convertView.findViewById(R.id.avatar);
             /*holder.messageBody = (TextView) convertView.findViewById(R.id.message_body);
             holder.messageBody.setText(message.getText());*/
             convertView.setTag(holder);
 
+            if (mutableAvatar.getValue() != null) {
+                Glide.with(context)
+                        .load(mutableAvatar.getValue())
+                        .into(holder.avatar);
+            } else {
+                Glide.with(context)
+                        .load(R.drawable.ic_account_circle_black_24dp)
+                        .into(holder.avatar);
+            }
+
         } else { // this message was sent by someone else so let's create an advanced chat bubble on the left
             convertView = messageInflater.inflate(R.layout.item_chat_recieved, null);
-            /*holder.avatar = (View) convertView.findViewById(R.id.avatar);
-            holder.name = (TextView) convertView.findViewById(R.id.name);
+            /*holder.name = (TextView) convertView.findViewById(R.id.name);
             holder.messageBody = (TextView) convertView.findViewById(R.id.message_body);*/
             convertView.setTag(holder);
 
@@ -71,8 +88,10 @@ public class PingChatListViewAdapter extends BaseAdapter {
         return i;
     }
 
+
+
     public class MessageViewHolder {
-        View avatar;
+        ImageView avatar;
         TextView messageBody;
         MessageViewHolder() {}
     }

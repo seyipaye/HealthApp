@@ -28,13 +28,9 @@ import com.breezytechdevelopers.healthapp.network.ApiBodies.UserProfileBody;
 import com.breezytechdevelopers.healthapp.databinding.FragmentProfileBinding;
 import com.breezytechdevelopers.healthapp.utils.Utils;
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
@@ -184,7 +180,7 @@ public class ProfileViewModel extends AndroidViewModel {
                     public void onFetchFailure(String message) {
                         failedImageUpload(message);
                     }
-                });
+        });
     }
 
     private void failedImageUpload(String errorMessage) {

@@ -1,7 +1,9 @@
 package com.breezytechdevelopers.healthapp.ui.fullscreen;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,13 +18,14 @@ import com.breezytechdevelopers.healthapp.database.entities.FirstAidTip;
 import com.breezytechdevelopers.healthapp.database.entities.Message;
 import com.breezytechdevelopers.healthapp.databinding.FragmentPingChatBinding;
 import com.breezytechdevelopers.healthapp.ui.firstAid.FirstAidRVAdapter;
+import com.breezytechdevelopers.healthapp.ui.profile.ProfileViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PingChatFragment extends Fragment {
 
-    private PingChatViewModel mViewModel;
+    private PingChatViewModel pingChatViewModel;
     private FragmentPingChatBinding binding;
     PingChatListViewAdapter pingChatListViewAdapter;
 
@@ -35,7 +38,8 @@ public class PingChatFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentPingChatBinding.inflate(inflater);
-        pingChatListViewAdapter = new PingChatListViewAdapter(requireContext());
+        pingChatViewModel = new ViewModelProvider(this).get(PingChatViewModel.class);
+        pingChatListViewAdapter = new PingChatListViewAdapter(requireContext(), pingChatViewModel.getMutableAvatar());
         binding.pingChatListView.setAdapter(pingChatListViewAdapter);
 
         // Start
@@ -50,15 +54,6 @@ public class PingChatFragment extends Fragment {
                 change = true;
             }
         }
-
         return binding.getRoot();
     }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(requireActivity()).get(PingChatViewModel.class);
-        // TODO: Use the ViewModel
-    }
-
 }
