@@ -67,6 +67,8 @@ dependencies {
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     implementation 'com.google.firebase:firebase-storage:19.1.1'
     implementation 'com.github.FasterXML:jackson-databind:2.6.0-rc3b'
+    implementation 'com.github.hkk595:Resizer:v1.5'
+
 
     //Retrofit and GSON
     implementation 'com.squareup.retrofit2:retrofit:2.7.2'
