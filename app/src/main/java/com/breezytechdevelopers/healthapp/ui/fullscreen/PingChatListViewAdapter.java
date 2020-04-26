@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.breezytechdevelopers.healthapp.R;
 import com.breezytechdevelopers.healthapp.database.entities.Message;
@@ -22,13 +23,19 @@ import java.util.List;
 // MessageAdapter.java
 public class PingChatListViewAdapter extends BaseAdapter {
 
-    List<Message> messages = new ArrayList<Message>();
-    Context context;
+    List<Message> messages = new ArrayList<>();
     private MutableLiveData<Bitmap> mutableAvatar;
+    Context context;
+
 
     public PingChatListViewAdapter(Context context, MutableLiveData<Bitmap> mutableAvatar) {
         this.context = context;
         this.mutableAvatar = mutableAvatar;
+    }
+
+    public void add(Message message) {
+        this.messages.add(message);
+        notifyDataSetChanged(); // to render the list we need to notify
     }
 
     // This is the backbone of the class, it handles the creation of single ListView row (chat bubble)
@@ -45,16 +52,13 @@ public class PingChatListViewAdapter extends BaseAdapter {
             holder.messageBody.setText(message.getText());*/
             convertView.setTag(holder);
 
-            if (mutableAvatar.getValue() != null) {
-                Glide.with(context)
-                        .load(mutableAvatar.getValue())
-                        .into(holder.avatar);
-            } else {
-                Glide.with(context)
-                        .load(R.drawable.ic_account_circle_black_24dp)
-                        .into(holder.avatar);
-            }
-
+            mutableAvatar.observeForever(bitmap -> {
+                if (bitmap != null) {
+                    Glide.with(context)
+                            .load(mutableAvatar.getValue())
+                            .into(holder.avatar);
+                }
+            });
         } else { // this message was sent by someone else so let's create an advanced chat bubble on the left
             convertView = messageInflater.inflate(R.layout.item_chat_recieved, null);
             /*holder.name = (TextView) convertView.findViewById(R.id.name);
@@ -64,13 +68,7 @@ public class PingChatListViewAdapter extends BaseAdapter {
            /* holder.name.setText(message.getMemberData().getName());
             holder.messageBody.setText(message.getText());*/
         }
-
         return convertView;
-    }
-
-    public void add(Message message) {
-        this.messages.add(message);
-        notifyDataSetChanged(); // to render the list we need to notify
     }
 
     @Override
@@ -87,8 +85,6 @@ public class PingChatListViewAdapter extends BaseAdapter {
     public long getItemId(int i) {
         return i;
     }
-
-
 
     public class MessageViewHolder {
         ImageView avatar;

@@ -70,7 +70,7 @@
             android:divider="@null"
             android:listSelector="@android:color/transparent"
             android:scrollbarSize="0dp"
-            tools:listitem="@layout/item_chat_recieved" />
+            tools:listitem="@layout/item_chat_sent" />
 
     </LinearLayout>
 

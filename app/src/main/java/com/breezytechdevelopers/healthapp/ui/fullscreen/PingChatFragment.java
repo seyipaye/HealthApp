@@ -29,7 +29,6 @@ public class PingChatFragment extends Fragment {
     private FragmentPingChatBinding binding;
     PingChatListViewAdapter pingChatListViewAdapter;
 
-
     public static PingChatFragment newInstance() {
         return new PingChatFragment();
     }
@@ -43,7 +42,6 @@ public class PingChatFragment extends Fragment {
         binding.pingChatListView.setAdapter(pingChatListViewAdapter);
 
         // Start
-        List<FirstAidTip> firstAidTips = new ArrayList<>();
         boolean change = true;
         for (int i = 0; i < 10; i++) {
             if (change) {

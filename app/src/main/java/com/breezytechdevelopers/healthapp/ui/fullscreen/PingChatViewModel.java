@@ -19,13 +19,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
-
 public class PingChatViewModel extends AndroidViewModel {
     private final AppRepository appRepository;
     private final LiveData<UserProfile> userProfileLiveData;
-    public MutableLiveData<Bitmap> mutableAvatar;
-    private UserProfile userProfile;
+    private MutableLiveData<Bitmap> mutableAvatar;
 
     public PingChatViewModel(@NonNull Application application) {
         super(application);
@@ -33,7 +30,6 @@ public class PingChatViewModel extends AndroidViewModel {
         userProfileLiveData = appRepository.getUserProfile();
         mutableAvatar = new MutableLiveData<>();
         userProfileLiveData.observeForever(userProfile -> {
-            this.userProfile = userProfile;
             if (userProfile != null) {
                 getAvatarThumbnail(userProfile.getImage());
             }
@@ -56,7 +52,7 @@ public class PingChatViewModel extends AndroidViewModel {
                 });
     }
 
-    public MutableLiveData<Bitmap> getMutableAvatar() {
+    MutableLiveData<Bitmap> getMutableAvatar() {
         return mutableAvatar;
     }
     // TODO: Implement the ViewModel
