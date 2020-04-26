@@ -46,7 +46,6 @@ public class FirstAidFragment extends Fragment {
 
         firstAidRVAdapter = new FirstAidRVAdapter(getParentFragmentManager());
         binding.firstAidRecyclerview.setAdapter(firstAidRVAdapter);
-
         return binding.getRoot();
     }
 

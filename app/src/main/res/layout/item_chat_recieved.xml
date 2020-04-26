@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="60dp"
+    android:paddingEnd="16dp"
+    android:orientation="horizontal"
+    android:clipToPadding="false"
+    android:paddingBottom="12dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/messageBody"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/chat_item_recieved_bg"
+        android:padding="16dp"
+        style="@style/text_view_style"
+        android:text="How are you doing?
+        This is a long message that should probably wrap." />
+</LinearLayout>

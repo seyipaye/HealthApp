@@ -32,7 +32,7 @@
             android:layout_height="45dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:paddingEnd="45dp"
+            android:paddingEnd="30dp"
             android:text="Ping history"
             android:textAppearance="@style/text_view_style"
             android:textColor="@color/colorPrimaryDark"

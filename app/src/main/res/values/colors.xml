@@ -3,9 +3,10 @@
     <color name="colorPrimary">#09A5DB</color>
     <color name="colorPrimaryDark">#023664</color>
     <color name="colorAccent">@android:color/white</color>
+    <color name="colorPrimaryLight">#B209A5DB</color>
 
     <color name="colorTextPrimary">@android:color/white</color>
-    <color name="colorScreenBackground">#F6F7F9</color>
+    <color name="colorScreenBackground">#F4F4F4</color>
     <color name="colorTextHint">#E0E0E0</color>
     
     <color name="notifColor">#EB5757</color>
@@ -20,4 +21,6 @@
 
     <color name="tab_card_background">@color/login_google_background</color>
     <color name="tab_card_text">#808080</color>
+    
+    <color name="chat_item_sent_bg_color">@android:color/white</color>
 </resources>
