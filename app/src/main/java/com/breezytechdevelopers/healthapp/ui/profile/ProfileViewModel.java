@@ -3,7 +3,10 @@ package com.breezytechdevelopers.healthapp.ui.profile;
 import android.app.Application;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -23,9 +26,16 @@ import com.breezytechdevelopers.healthapp.database.entities.UserProfile;
 import com.breezytechdevelopers.healthapp.network.ApiCallbacks;
 import com.breezytechdevelopers.healthapp.network.ApiBodies.UserProfileBody;
 import com.breezytechdevelopers.healthapp.databinding.FragmentProfileBinding;
+import com.breezytechdevelopers.healthapp.utils.Utils;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -35,6 +45,7 @@ public class ProfileViewModel extends AndroidViewModel {
     private AppRepository appRepository;
     private MutableLiveData<ProfileState> profileState;
     final int RC_PERMISSION_READ_EXTERNAL_STORAGE = 1;
+    final int RC_PERMISSION_WRITE_EXTERNAL_STORAGE = 3;
     final int RC_IMAGE_GALLERY = 2;
     static User user;
     String TAG = getClass().getSimpleName();
@@ -58,7 +69,7 @@ public class ProfileViewModel extends AndroidViewModel {
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference().child("users_avatar");
         userLiveData.observeForever(user -> {
-            this.user = user;
+            ProfileViewModel.user = user;
             Log.i(TAG, "ProfileViewModel: user Changed ");
             if (user == null) {
                 profileState.setValue(ProfileState.UNREGISTERED);
@@ -103,8 +114,14 @@ public class ProfileViewModel extends AndroidViewModel {
     public void editAvatar(ProfileFragment fragment, FragmentProfileBinding binding) {
         this.binding = binding;
         Log.i(TAG, "editAvatar: ");
-        if (ContextCompat.checkSelfPermission(fragment.requireContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(fragment.requireActivity(), new String[] {android.Manifest.permission.READ_EXTERNAL_STORAGE}, RC_PERMISSION_READ_EXTERNAL_STORAGE);
+        if (ContextCompat.checkSelfPermission(fragment.requireContext(),
+                android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(fragment.requireActivity(),
+                    new String[] {android.Manifest.permission.READ_EXTERNAL_STORAGE}, RC_PERMISSION_READ_EXTERNAL_STORAGE);
+        } else if (ContextCompat.checkSelfPermission(fragment.requireContext(),
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(fragment.requireActivity(),
+                    new String[] {android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, RC_PERMISSION_WRITE_EXTERNAL_STORAGE);
         } else {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
@@ -130,17 +147,25 @@ public class ProfileViewModel extends AndroidViewModel {
     }
 
     private void uploadPicture(Uri uri) {
-        binding.avatarSpinKit.setVisibility(View.VISIBLE);
-        String filename = String.format("%s_%s.jpg", userProfile.getId(), userProfile.getFirst_name());
-        StorageReference fileRef = storageRef.child(filename);
-        fileRef.putFile(uri).addOnSuccessListener(taskSnapshot ->
-                fileRef.getDownloadUrl().addOnSuccessListener(uri1 -> {
-                    String downloadUrl = uri1.toString();
-                    Log.d(TAG, "uploadPicture: " + downloadUrl);
-                    saveUrl(downloadUrl);
-                })).addOnFailureListener(e -> {
-                    failedImageUpload(e.getMessage());
-                });
+        try {
+            binding.avatarSpinKit.setVisibility(View.VISIBLE);
+
+            Bitmap scaledBitmap = Utils.getScaledBitmap(1080,
+                    MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), uri));
+
+            String filename = String.format("%s_%s.jpg", userProfile.getId(), userProfile.getFirst_name());
+            StorageReference fileRef = storageRef.child(filename);
+            fileRef.putFile(Utils.getImageUri(getApplication(), scaledBitmap, "Title"))
+                    .addOnSuccessListener(taskSnapshot ->
+                    fileRef.getDownloadUrl().addOnSuccessListener(uri1 -> {
+                        String downloadUrl = uri1.toString();
+                        Log.d(TAG, "uploadPicture: " + downloadUrl);
+                        saveUrl(downloadUrl);
+                    })).addOnFailureListener(e -> {failedImageUpload(e.getMessage());
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void saveUrl(String downloadUrl) {

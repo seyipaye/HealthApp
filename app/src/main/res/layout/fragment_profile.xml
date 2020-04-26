@@ -89,7 +89,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:visibility="gone"
-                    app:SpinKit_Color="@color/colorPrimaryDark" />
+                    app:SpinKit_Color="@color/colorPrimaryLight" />
 
                 <ImageButton
                     android:id="@+id/edit_avatar"
