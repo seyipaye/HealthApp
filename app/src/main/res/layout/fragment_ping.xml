@@ -125,6 +125,22 @@
                         android:layout_marginTop="16dp"
                         android:text="Send Ping" />
 
+                    <Button
+                        android:id="@+id/cancelPingBtn"
+                        tools:visibility="visible"
+                        android:visibility="gone"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/roboto"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:text="Cancel"
+                        android:textAllCaps="false"
+                        android:textSize="16sp"
+                        />
+
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

@@ -2,6 +2,7 @@ package com.breezytechdevelopers.healthapp.ui.ping;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,15 +19,16 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.breezytechdevelopers.healthapp.AppRepository;
 import com.breezytechdevelopers.healthapp.R;
 import com.breezytechdevelopers.healthapp.database.entities.User;
 import com.breezytechdevelopers.healthapp.database.entities.UserProfile;
 import com.breezytechdevelopers.healthapp.network.ApiCallbacks;
 import com.breezytechdevelopers.healthapp.network.ApiBodies.PingBody;
 import com.breezytechdevelopers.healthapp.databinding.FragmentPingBinding;
+import com.breezytechdevelopers.healthapp.ui.auth.AuthActivity;
+import com.breezytechdevelopers.healthapp.ui.fullscreen.FullscreenActivity;
 import com.breezytechdevelopers.healthapp.utils.FragmentVisibleInterface;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PingFragment extends Fragment implements View.OnClickListener {
 
@@ -53,28 +55,6 @@ public class PingFragment extends Fragment implements View.OnClickListener {
         });
         pingViewModel.getUserProfile().observe(getViewLifecycleOwner(), userProfile -> {
             this.userProfile = userProfile;
-        });
-        AtomicBoolean timeChanged = new AtomicBoolean(false);
-        timeChanged.set(false);
-        pingViewModel.pingTimerMillisLeft.observe(getViewLifecycleOwner(), timerMillisLeft -> {
-            Log.i(TAG, "subscribeUI: ping timer");
-            if (timerMillisLeft != null) {
-                if ( timerMillisLeft == 0) {
-                    binding.pingEntryLayout.setVisibility(View.VISIBLE);
-                    binding.awaitingResponseTV.setVisibility(View.GONE);
-                    binding.sendPingBtn.setText("Send Ping");
-                    binding.sendPingBtn.setClickable(true);
-                    binding.messageEntry.setText(null);
-                } else {
-                    if (timeChanged.get()) {
-                        binding.pingEntryLayout.setVisibility(View.GONE);
-                        binding.awaitingResponseTV.setVisibility(View.VISIBLE);
-                        binding.sendPingBtn.setText("Sent Ping");
-                        binding.sendPingBtn.setClickable(false);
-                    }
-                    timeChanged.set(true);
-                }
-            }
         });
         binding.messageEntry.setImeActionLabel("Search", KeyEvent.KEYCODE_ENTER);
         binding.messageEntry.setOnEditorActionListener((v, actionId, event) -> {
@@ -112,6 +92,15 @@ public class PingFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void showChat(String pingID) {
+        Intent myIntent = new Intent(requireActivity(), FullscreenActivity.class);
+        if (user != null && user.isAuthenticated()) {
+            myIntent.putExtra("pingID", user);
+            myIntent.putExtra("motive", AppRepository.PINGCHAT);
+        }
+        requireActivity().startActivity(myIntent);
+    }
+
     private void sendPing() {
         if (userProfileComplete()) {
             if (!TextUtils.isEmpty(binding.messageEntry.getText())) {
@@ -123,13 +112,16 @@ public class PingFragment extends Fragment implements View.OnClickListener {
                         binding.pingEntryLayout.setVisibility(View.GONE);
                         binding.awaitingResponseTV.setVisibility(View.VISIBLE);
                         binding.sendPingBtn.setText("Pinging...");
+                        binding.cancelPingBtn.setVisibility(View.VISIBLE);
                         binding.sendPingBtn.setClickable(false);
                     }
                     @Override
                     public void onPingSuccess(PingBody.Response pingResponse) {
                         pingViewModel.startTimer(180);
                         binding.sendPingBtn.setText("Sent Ping");
+                        binding.cancelPingBtn.setVisibility(View.VISIBLE);
                         binding.sendPingBtn.setClickable(false);
+                        showChat(pingResponse.getData().getId());
                         Toast.makeText(getContext(), pingResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     @Override
@@ -137,6 +129,7 @@ public class PingFragment extends Fragment implements View.OnClickListener {
                         binding.pingEntryLayout.setVisibility(View.VISIBLE);
                         binding.awaitingResponseTV.setVisibility(View.GONE);
                         binding.sendPingBtn.setText("Send Ping");
+                        binding.cancelPingBtn.setVisibility(View.GONE);
                         binding.sendPingBtn.setClickable(true);
                         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
                     }
@@ -146,6 +139,7 @@ public class PingFragment extends Fragment implements View.OnClickListener {
             }
         }
     }
+
 
     private boolean userProfileComplete() {
         boolean valid = true;

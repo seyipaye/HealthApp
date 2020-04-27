@@ -46,6 +46,7 @@ public class AppRepository extends SafeAPIRequest {
     public static final String CHANGEPASS = "changePassword";
     public static final String PINGHISTORY = "pingHistory";
     public static final String FORGOTPASS = "forgotPassword";
+    public static final String PINGCHAT = "pingChat";
     private final FirstAidTipDao firstAidTipDao;
     private final TimerDao timerDao;
     private final AppDatabase appDatabase;

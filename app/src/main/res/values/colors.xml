@@ -22,5 +22,5 @@
     <color name="tab_card_background">@color/login_google_background</color>
     <color name="tab_card_text">#808080</color>
     
-    <color name="chat_item_sent_bg_color">@android:color/white</color>
+    <color name="message_item_light_bg">#66E0E0E0</color>
 </resources>

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.breezytechdevelopers.healthapp.R;
 import com.breezytechdevelopers.healthapp.database.entities.Message;
 import com.breezytechdevelopers.healthapp.databinding.FragmentPingChatBinding;
 import com.breezytechdevelopers.healthapp.utils.Utils;
@@ -25,7 +27,7 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
-public class PingChatFragment extends Fragment {
+public class PingChatFragment extends Fragment implements View.OnClickListener {
 
     private PingChatViewModel pingChatViewModel;
     private FragmentPingChatBinding binding;
@@ -50,14 +52,20 @@ public class PingChatFragment extends Fragment {
         pingChatRVAdapter.add(new Message("Hi, this is an echo web socket, " +
                 "It say's exactly what you say, try it out 😁", false));
 
-        binding.sendButton.setOnClickListener(view -> {
-            String message = binding.messageEntry.getText().toString();
-            if (message.length() > 0) {
-                Utils.hideKeyboardFrom(view, requireContext());
-                sendMessage(message);
-                binding.messageEntry.getText().clear();
+       /* // Start
+        boolean change = true;
+        for (int i = 0; i < 10; i++) {
+            if (change) {
+                pingChatRVAdapter.add(new Message("sdkunalsknalksaxasxsa", change));
+                change = false;
+            } else {
+                pingChatRVAdapter.add(new Message("adcasdcasascacas", change));
+                change = true;
             }
-        });
+        }
+*/
+       binding.backButton.setOnClickListener(this);
+        binding.sendButton.setOnClickListener(this);
         client = new OkHttpClient();
         start();
         return binding.getRoot();
@@ -65,8 +73,10 @@ public class PingChatFragment extends Fragment {
 
     private void sendMessage(String text) {
         webSocket.send(text);
-        requireActivity().runOnUiThread(() ->
-                pingChatRVAdapter.add(new Message(text, true)));
+        requireActivity().runOnUiThread(() -> {
+            pingChatRVAdapter.add(new Message(text, true));
+            binding.pingChatRV.scrollToPosition(pingChatRVAdapter.getItemCount() - 1);
+        });
     }
 
     private void start() {
@@ -80,22 +90,47 @@ public class PingChatFragment extends Fragment {
     }
 
     private void output(String text) {
-        requireActivity().runOnUiThread(() ->
-                pingChatRVAdapter.add(new Message(text, false)));
+        requireActivity().runOnUiThread(() -> {
+            pingChatRVAdapter.add(new Message(text, false));
+            binding.pingChatRV.scrollToPosition(pingChatRVAdapter.getItemCount() - 1);
+        });
+    }
+
+    public void removeChat(boolean totally) {
+        Utils.hideKeyboardFrom(binding.messageEntry, requireContext());
+        if (totally)
+            requireActivity().finish();
+        else
+            NavHostFragment.findNavController(this).popBackStack();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.backButton:
+                removeChat(true);
+            case R.id.sendButton:
+                String message = binding.messageEntry.getText().toString();
+                if (message.length() > 0) {
+                    Utils.hideKeyboardFrom(view, requireContext());
+                    sendMessage(message);
+                    binding.messageEntry.getText().clear();
+                }
+        }
     }
 
     private final class ChatWebSocketListener extends WebSocketListener {
         @Override
-        public void onOpen(@NonNull WebSocket webSocket, @NonNull Response response) {
+        public void onOpen(WebSocket webSocket, Response response) {
             //webSocket.send(ByteString.decodeHex("deadbeef"));
             //webSocket.close(NORMAL_CLOSURE_STATUS, "Goodbye !");
         }
         @Override
-        public void onMessage(@NonNull WebSocket webSocket, @NonNull String text) {
+        public void onMessage(WebSocket webSocket, String text) {
             output(text);
         }
         @Override
-        public void onMessage(@NonNull WebSocket webSocket, ByteString bytes) {
+        public void onMessage(WebSocket webSocket, ByteString bytes) {
             output(bytes.hex());
         }
         @Override
@@ -104,7 +139,7 @@ public class PingChatFragment extends Fragment {
             Toast.makeText(requireActivity(), "Closing : " + code + " / " + reason, Toast.LENGTH_SHORT).show();
         }
         @Override
-        public void onFailure(@NonNull WebSocket webSocket, Throwable t, Response response) {
+        public void onFailure(WebSocket webSocket, Throwable t, Response response) {
             Log.e(TAG, "onFailure: "+ t.getMessage());
             Toast.makeText(requireActivity(), "Error : " + t.getMessage(), Toast.LENGTH_SHORT).show();
         }
