@@ -61,16 +61,14 @@
             android:layout_height="wrap_content"
             android:text="30 Mar at 11:41"/>
 
-        <ListView
-            android:id="@+id/pingChatListView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/pingChatRV"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:clickable="false"
-            android:divider="@null"
-            android:listSelector="@android:color/transparent"
-            android:scrollbarSize="0dp"
-            tools:listitem="@layout/item_chat_sent" />
+            tools:listitem="@layout/item_message_sent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            />
 
     </LinearLayout>
 
@@ -87,6 +85,7 @@
         android:id="@+id/bottom_layout">
 
         <EditText
+            android:id="@+id/messageEntry"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

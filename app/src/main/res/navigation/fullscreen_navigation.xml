@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/pingChatFragment"
-        android:name="com.breezytechdevelopers.healthapp.ui.fullscreen.PingChatFragment"
+        android:name="com.breezytechdevelopers.healthapp.ui.chat.PingChatFragment"
         android:label="PingChatFragment"
         tools:layout="@layout/fragment_ping_chat" />
 </navigation>

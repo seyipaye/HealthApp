@@ -1,13 +1,22 @@
 package com.breezytechdevelopers.healthapp.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import java.io.ByteArrayOutputStream;
 
 public class Utils {
+
+    public static void hideKeyboardFrom(View view, Context context) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
     public static Uri getImageUri(Context inContext, Bitmap inImage, String title) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);

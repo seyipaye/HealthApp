@@ -11,12 +11,12 @@ android {
             keyPassword 'Seyifunmi'
         }
     }
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion '29.0.3'
     defaultConfig {
         applicationId "com.breezytechdevelopers.healthapp"
         minSdkVersion 19
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -69,9 +69,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:19.1.1'
     implementation 'com.github.FasterXML:jackson-databind:2.6.0-rc3b'
 
-    //Retrofit and GSON
+    // Network
     implementation 'com.squareup.retrofit2:retrofit:2.7.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
+    implementation("com.squareup.okhttp3:okhttp:4.5.0")
+
 
     // Testing
     testImplementation 'junit:junit:4.12'

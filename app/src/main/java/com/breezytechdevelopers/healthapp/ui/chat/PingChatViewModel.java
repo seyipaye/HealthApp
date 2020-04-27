@@ -1,4 +1,4 @@
-package com.breezytechdevelopers.healthapp.ui.fullscreen;
+package com.breezytechdevelopers.healthapp.ui.chat;
 
 import android.app.Application;
 import android.graphics.Bitmap;
