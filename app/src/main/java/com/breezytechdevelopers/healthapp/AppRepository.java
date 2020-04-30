@@ -91,6 +91,7 @@ public class AppRepository extends SafeAPIRequest {
         AppDatabase.dbWriteExecutor.execute(() -> appDatabase.userProfileDao().insert(userProfile));
     }
 
+
     public void saveFirstAidTips(List<FirstAidTip> firstAidTips) {
         List<FirstAidTip> list = new ArrayList<>();
         for (FirstAidTip tip:

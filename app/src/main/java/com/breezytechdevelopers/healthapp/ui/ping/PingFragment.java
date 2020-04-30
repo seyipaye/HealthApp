@@ -32,6 +32,8 @@ import com.breezytechdevelopers.healthapp.databinding.FragmentPingBinding;
 import com.breezytechdevelopers.healthapp.ui.fullscreen.FullscreenActivity;
 import com.breezytechdevelopers.healthapp.utils.FragmentVisibleInterface;
 
+import javax.sql.StatementEvent;
+
 public class PingFragment extends Fragment implements View.OnClickListener {
 
     private PingViewModel pingViewModel;
@@ -131,7 +133,7 @@ public class PingFragment extends Fragment implements View.OnClickListener {
                 if (((Button) v).getText().toString().contains("Send Ping")) {
                     binding.messageEntry.onEditorAction(EditorInfo.IME_ACTION_DONE);
                 } else {
-                    showChat("id");
+                    showChat("i", "m");
                 }
                 break;
             case R.id.cancelPingBtn:
@@ -141,11 +143,12 @@ public class PingFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void showChat(String pingID) {
+    private void showChat(String pingID, String message) {
         Intent myIntent = new Intent(requireActivity(), FullscreenActivity.class);
         if (user != null && user.isAuthenticated()) {
             myIntent.putExtra("pingID", pingID);
             myIntent.putExtra("token", user.getToken());
+            myIntent.putExtra("initialMessage", message);
             myIntent.putExtra("motive", AppRepository.PINGCHAT);
         }
         requireActivity().startActivity(myIntent);
@@ -163,7 +166,7 @@ public class PingFragment extends Fragment implements View.OnClickListener {
                     }
                     @Override
                     public void onPingSuccess(PingBody.Response pingResponse) {
-                        showChat(pingResponse.getData().getId());
+                        showChat(pingResponse.getData().getId(), pingResponse.getData().getMessage());
                         Toast.makeText(getContext(), pingResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     @Override

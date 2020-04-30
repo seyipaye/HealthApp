@@ -20,6 +20,9 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import com.neovisionaries.ws.client.WebSocketListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,14 +30,13 @@ import java.util.Map;
 public class SocketManager {
     private static Context mContext;
     private static MutableLiveData<WebSocketState> webSocketState;
-    private static MutableLiveData<List<Message>> mutableMessageList;
     private static final int NORMAL_CLOSURE_STATUS = 1000;
     private static PingChatCallback pingChatCallback;
     private static AppExecutors mAppExecutors;
     public PingChatCallback callback;
 
     public void addMessage(Message message) {
-        mutableMessageList.getValue().add(message);
+        ((HealthApp) mContext).addToMessageList(message);
     }
 
     public enum WebSocketState {
@@ -64,7 +66,6 @@ public class SocketManager {
             mAppExecutors = appExecutors;
             instance = new SocketManager(context);
             webSocketState = new MutableLiveData<>(WebSocketState.INACTIVE);
-            mutableMessageList = new MutableLiveData<>(new ArrayList<>());
         }
         return instance;
     }
@@ -75,14 +76,15 @@ public class SocketManager {
     public static final String TAG = SocketManager.class.getSimpleName();
     private WebSocket webSocket;
 
-    public WebSocket getWebSocket(Application application) {
+    public WebSocket getWebSocket(String pingID, String token, String initialMessage) {
         try {
             if(webSocket == null){
                 /*webSocket = new WebSocketFactory().createSocket("ws://echo.websocket.org", 5000);*/
 
-                webSocket = new WebSocketFactory().createSocket("wss://curefb.herokuapp.com/ws/chat/65outsnwpvc7", 30000);
-                webSocket.addProtocol("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiIzMjc0ZDY0OWV6MWgiLCJpYXQiOjE1ODgyNzI4MjQsImV4cCI6MTU4ODQ0NTYyNH0.xu3EgK3_NYtpLb5Hc1bOQwMzE-rD7Db2bUjLaxC60sw");
-
+                webSocket = new WebSocketFactory().createSocket("wss://curefb.herokuapp.com/ws/chat/" + pingID, 30000);
+                webSocket.addProtocol(token);
+                ((HealthApp) mContext).getMutableMessageList().postValue(new ArrayList<>());
+                addMessage(new Message(initialMessage, true));
                 Log.i(TAG, "connectSocket: new");
                 webSocket.addListener(new WebSocketListener() {
                     @Override
@@ -93,7 +95,7 @@ public class SocketManager {
                     @Override
                     public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                         Log.i(TAG, "onConnected: ");
-                        webSocketState.setValue(WebSocketState.CONNECTED);
+                        webSocketState.postValue(WebSocketState.CONNECTED);
                     }
 
                     @Override
@@ -145,9 +147,19 @@ public class SocketManager {
 
                     @Override
                     public void onTextMessage(WebSocket websocket, String text) throws Exception {
-                        Log.i(TAG, "onTextMessage: " + text);
-                        webSocketState.setValue(WebSocketState.CONNECTED);
-                        pingChatCallback.onReceivedText(text);
+                        mAppExecutors.networkIO().execute(() -> {
+                            Log.i(TAG, "onTextMessage: " + text);
+                            webSocketState.postValue(WebSocketState.CONNECTED);
+                            try {
+                                JSONObject jsonData = new JSONObject(text).getJSONObject("data");
+                                if (!jsonData.has("status")) {
+                                    ((HealthApp) mContext).addToMessageList(new Message(jsonData.getString("message"), false));
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                ((HealthApp) mContext).addToMessageList(new Message(text, false));
+                            }
+                        });
                     }
 
                     @Override
@@ -236,7 +248,6 @@ public class SocketManager {
                         Log.i(TAG, "onSendingHandshake: ");
                     }
                 });
-
             } else {
                 Log.i(TAG, "connectSocket: existing");
             }
@@ -287,17 +298,18 @@ public class SocketManager {
 
 
     public void storeReceivedMessage(String text) {
-        ((HealthApp) mContext).
+        //((HealthApp) mContext).
     }
     public boolean sendMessage(String text) {
         if (webSocket.isOpen()) {
             mAppExecutors.networkIO().execute(() -> {
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("type", "send_message");
-                jsonObject.addProperty("message", text);
+                jsonObject.addProperty("data", text);
                 Log.i(TAG, "sendMessage: " + jsonObject.toString());
                 webSocket.sendText(jsonObject.toString());
-                mutableMessageList.getValue().add(new Message(text, true));
+                ((HealthApp) mContext).addToMessageList(new Message(text, true));
+
             });
             return true;
         } else {
@@ -322,10 +334,6 @@ public class SocketManager {
 
     public MutableLiveData<WebSocketState> getWebSocketState() {
         return webSocketState;
-    }
-
-    public static MutableLiveData<List<Message>> getMutableMessageList() {
-        return mutableMessageList;
     }
 
     /**

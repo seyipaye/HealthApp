@@ -30,6 +30,9 @@ public class PingChatFragment extends Fragment implements View.OnClickListener {
     PingChatRVAdapter pingChatRVAdapter;
     SocketManager socketManager;
     String TAG = getClass().getSimpleName();
+    private String pingID;
+    private String token;
+    private String initialMessage;
 
     public static PingChatFragment newInstance() {
         return new PingChatFragment();
@@ -60,6 +63,10 @@ public class PingChatFragment extends Fragment implements View.OnClickListener {
         socketManager = ((HealthApp) requireActivity().getApplication()).getSocketManager();
         /*socketManager.addMessage((new Message("Hi, this is an echo web socket, " +
                 "It say's exactly what you say, try it out 😁", false)));*/
+        Log.i(TAG, "onCreateView: " + requireActivity().getIntent());
+        pingID = requireActivity().getIntent().getStringExtra("pingID");
+        token = requireActivity().getIntent().getStringExtra("token");
+        initialMessage = requireActivity().getIntent().getStringExtra("initialMessage");
         return binding.getRoot();
     }
 
@@ -71,11 +78,11 @@ public class PingChatFragment extends Fragment implements View.OnClickListener {
 
             // Do network action in this function
             try {
-                if (socketManager.getWebSocket(requireActivity().getApplication()).isOpen()) {
+                if (socketManager.getWebSocket(pingID, token, initialMessage).isOpen()) {
                     socketManager.getWebSocketState().postValue(SocketManager.WebSocketState.CONNECTED);
                     Log.i(TAG, "connectSocket: opened");
                 } else {
-                    socketManager.getWebSocket(requireActivity().getApplication()).connect();
+                    socketManager.getWebSocket(pingID, token, initialMessage).connect();
                     socketManager.getWebSocketState().postValue(SocketManager.WebSocketState.STARTED);
                     //socketManager.callback = new PingChatAdapter();
                 }
@@ -84,7 +91,7 @@ public class PingChatFragment extends Fragment implements View.OnClickListener {
             }
         }).start();
 
-        SocketManager.getMutableMessageList().observe(getViewLifecycleOwner(), messageList -> {
+        ((HealthApp) requireActivity().getApplication()).getMutableMessageList().observe(getViewLifecycleOwner(), messageList -> {
             pingChatRVAdapter.setList(messageList);
             Log.i(TAG, "getMutableMessageList: ");
         });
@@ -124,9 +131,9 @@ public class PingChatFragment extends Fragment implements View.OnClickListener {
     private class PingChatAdapter implements PingChatCallback {
         @Override
         public void onReceivedText(String text) {
-            SocketManager.getMutableMessageList().getValue().add(new Message(text, false));
+            //SocketManager.getMutableMessageList().getValue().add(new Message(text, false));
             Log.i(TAG, "onReceivedText: " + text);
-            //mutableMessageList.postValue(mutableMessageList.getValue());
+            /*SocketManager.getMutableMessageList().postValue(SocketManager.getMutableMessageList().getValue());*/
         }
 
         @Override
