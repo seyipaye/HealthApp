@@ -31,7 +31,11 @@ public class PingChatViewModel extends AndroidViewModel {
         mutableAvatar = new MutableLiveData<>();
         userProfileLiveData.observeForever(userProfile -> {
             if (userProfile != null) {
-                getAvatarThumbnail(userProfile.getImage());
+                try {
+                    getAvatarThumbnail(userProfile.getImage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

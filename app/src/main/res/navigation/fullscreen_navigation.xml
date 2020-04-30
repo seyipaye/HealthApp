@@ -9,5 +9,12 @@
         android:id="@+id/pingChatFragment"
         android:name="com.breezytechdevelopers.healthapp.ui.chat.PingChatFragment"
         android:label="PingChatFragment"
-        tools:layout="@layout/fragment_ping_chat" />
+        tools:layout="@layout/fragment_ping_chat" >
+        <argument
+            android:name="pingID"
+            app:argType="string" />
+        <argument
+            android:name="token"
+            app:argType="string" />
+    </fragment>
 </navigation>

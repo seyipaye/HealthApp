@@ -15,26 +15,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.breezytechdevelopers.healthapp.HealthApp;
 import com.breezytechdevelopers.healthapp.R;
 import com.breezytechdevelopers.healthapp.database.entities.Message;
 import com.breezytechdevelopers.healthapp.databinding.FragmentPingChatBinding;
+import com.breezytechdevelopers.healthapp.utils.SocketManager;
 import com.breezytechdevelopers.healthapp.utils.Utils;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.WebSocket;
-import okhttp3.WebSocketListener;
-import okio.ByteString;
+import com.neovisionaries.ws.client.WebSocketException;
 
 public class PingChatFragment extends Fragment implements View.OnClickListener {
 
     private PingChatViewModel pingChatViewModel;
     private FragmentPingChatBinding binding;
     PingChatRVAdapter pingChatRVAdapter;
-    private static final int NORMAL_CLOSURE_STATUS = 1000;
-    private OkHttpClient client;
-    private WebSocket webSocket;
+    SocketManager socketManager;
     String TAG = getClass().getSimpleName();
 
     public static PingChatFragment newInstance() {
@@ -49,9 +43,6 @@ public class PingChatFragment extends Fragment implements View.OnClickListener {
         pingChatRVAdapter = new PingChatRVAdapter(requireContext(), pingChatViewModel.getMutableAvatar());
         binding.pingChatRV.setAdapter(pingChatRVAdapter);
 
-        pingChatRVAdapter.add(new Message("Hi, this is an echo web socket, " +
-                "It say's exactly what you say, try it out 😁", false));
-
        /* // Start
         boolean change = true;
         for (int i = 0; i < 10; i++) {
@@ -64,36 +55,52 @@ public class PingChatFragment extends Fragment implements View.OnClickListener {
             }
         }
 */
-       binding.backButton.setOnClickListener(this);
+        binding.backButton.setOnClickListener(this);
         binding.sendButton.setOnClickListener(this);
-        client = new OkHttpClient();
-        start();
+        socketManager = ((HealthApp) requireActivity().getApplication()).getSocketManager();
+        /*socketManager.addMessage((new Message("Hi, this is an echo web socket, " +
+                "It say's exactly what you say, try it out 😁", false)));*/
         return binding.getRoot();
     }
 
-    private void sendMessage(String text) {
-        webSocket.send(text);
-        requireActivity().runOnUiThread(() -> {
-            pingChatRVAdapter.add(new Message(text, true));
-            binding.pingChatRV.scrollToPosition(pingChatRVAdapter.getItemCount() - 1);
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        new Thread(() -> {
+
+            // Do network action in this function
+            try {
+                if (socketManager.getWebSocket(requireActivity().getApplication()).isOpen()) {
+                    socketManager.getWebSocketState().postValue(SocketManager.WebSocketState.CONNECTED);
+                    Log.i(TAG, "connectSocket: opened");
+                } else {
+                    socketManager.getWebSocket(requireActivity().getApplication()).connect();
+                    socketManager.getWebSocketState().postValue(SocketManager.WebSocketState.STARTED);
+                    //socketManager.callback = new PingChatAdapter();
+                }
+            } catch (WebSocketException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        SocketManager.getMutableMessageList().observe(getViewLifecycleOwner(), messageList -> {
+            pingChatRVAdapter.setList(messageList);
+            Log.i(TAG, "getMutableMessageList: ");
         });
     }
 
-    private void start() {
-        Request request = new Request.Builder()
-                .url("ws://echo.websocket.org")
-                .build();
+    private void sendMessage() {
+        String message = binding.messageEntry.getText().toString();
+        if (message.length() > 0) {
+            Utils.hideKeyboardFrom(binding.messageEntry, requireContext());
+            Log.i(TAG, "sendMessage: "+ message);
+            if (!socketManager.sendMessage(message)) {
+                Log.i(TAG, "sendMessage: error");
+            }
+            binding.messageEntry.getText().clear();
+        }
 
-        ChatWebSocketListener listener = new ChatWebSocketListener();
-        webSocket = client.newWebSocket(request, listener);
-        client.dispatcher().executorService().shutdown();
-    }
-
-    private void output(String text) {
-        requireActivity().runOnUiThread(() -> {
-            pingChatRVAdapter.add(new Message(text, false));
-            binding.pingChatRV.scrollToPosition(pingChatRVAdapter.getItemCount() - 1);
-        });
     }
 
     public void removeChat(boolean totally) {
@@ -110,38 +117,26 @@ public class PingChatFragment extends Fragment implements View.OnClickListener {
             case R.id.backButton:
                 removeChat(true);
             case R.id.sendButton:
-                String message = binding.messageEntry.getText().toString();
-                if (message.length() > 0) {
-                    Utils.hideKeyboardFrom(view, requireContext());
-                    sendMessage(message);
-                    binding.messageEntry.getText().clear();
-                }
+                sendMessage();
         }
     }
 
-    private final class ChatWebSocketListener extends WebSocketListener {
+    private class PingChatAdapter implements PingChatCallback {
         @Override
-        public void onOpen(WebSocket webSocket, Response response) {
-            //webSocket.send(ByteString.decodeHex("deadbeef"));
-            //webSocket.close(NORMAL_CLOSURE_STATUS, "Goodbye !");
+        public void onReceivedText(String text) {
+            SocketManager.getMutableMessageList().getValue().add(new Message(text, false));
+            Log.i(TAG, "onReceivedText: " + text);
+            //mutableMessageList.postValue(mutableMessageList.getValue());
         }
+
         @Override
-        public void onMessage(WebSocket webSocket, String text) {
-            output(text);
-        }
-        @Override
-        public void onMessage(WebSocket webSocket, ByteString bytes) {
-            output(bytes.hex());
-        }
-        @Override
-        public void onClosing(WebSocket webSocket, int code, String reason) {
-            webSocket.close(NORMAL_CLOSURE_STATUS, null);
-            Toast.makeText(requireActivity(), "Closing : " + code + " / " + reason, Toast.LENGTH_SHORT).show();
-        }
-        @Override
-        public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-            Log.e(TAG, "onFailure: "+ t.getMessage());
-            Toast.makeText(requireActivity(), "Error : " + t.getMessage(), Toast.LENGTH_SHORT).show();
+        public void onError(String error) {
+            try {
+                Toast.makeText(requireActivity(), error, Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
+
 }

@@ -25,7 +25,9 @@
         android:gravity="center"
         android:text="@string/welcome_title"
         android:textAppearance="@style/search_firs"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="36sp"
+        android:textStyle="bold"
         app:lineHeight="43sp" />
 
     <ImageView
@@ -34,8 +36,8 @@
         android:layout_above="@id/bottom_layout"
         android:layout_below="@id/title"
         android:scaleType="centerInside"
-        android:tint="@color/colorPrimaryDark"
-        android:src="@drawable/ic_welcome_image" />
+        android:src="@drawable/ic_welcome_image"
+        android:tint="@color/colorTextHint" />
 
     <LinearLayout
         android:layout_width="match_parent"

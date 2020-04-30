@@ -37,14 +37,18 @@ public class PingChatRVAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public int getItemCount() {
-        return messageList.size();
+    public int getItemCount() { return messageList.size(); }
+
+    public void setList(List<Message> messageList) {
+        this.messageList = messageList;
+        notifyDataSetChanged();
     }
 
     public void add(Message message) {
         this.messageList.add(message);
         //// Todo use on item inserted
-        notifyDataSetChanged(); // to render the list we need to notify
+        notifyDataSetChanged();
+         // to render the list we need to notify
     }
 
     // Determines the appropriate ViewType according to the sender of the message.
@@ -54,10 +58,10 @@ public class PingChatRVAdapter extends RecyclerView.Adapter {
 
         if (message.isForUser()) {
             // If the current user is the sender of the message
-            return VIEW_TYPE_MESSAGE_SENT;
+            return VIEW_TYPE_MESSAGE_RECEIVED;
         } else {
             // If some other user sent the message
-            return VIEW_TYPE_MESSAGE_RECEIVED;
+            return VIEW_TYPE_MESSAGE_SENT;
         }
     }
 

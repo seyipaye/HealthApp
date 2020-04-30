@@ -12,21 +12,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.breezytechdevelopers.healthapp.AppRepository;
+import com.breezytechdevelopers.healthapp.HealthApp;
 import com.breezytechdevelopers.healthapp.R;
 import com.breezytechdevelopers.healthapp.database.entities.User;
 import com.breezytechdevelopers.healthapp.database.entities.UserProfile;
 import com.breezytechdevelopers.healthapp.network.ApiCallbacks;
 import com.breezytechdevelopers.healthapp.network.ApiBodies.PingBody;
 import com.breezytechdevelopers.healthapp.databinding.FragmentPingBinding;
-import com.breezytechdevelopers.healthapp.ui.auth.AuthActivity;
 import com.breezytechdevelopers.healthapp.ui.fullscreen.FullscreenActivity;
 import com.breezytechdevelopers.healthapp.utils.FragmentVisibleInterface;
 
@@ -41,11 +43,17 @@ public class PingFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentPingBinding.inflate(inflater, container, false);
-        binding.sendPingBtn.setOnClickListener(this);
-        binding.callAmbulanceBtn.setOnClickListener(this);
+        binding.solidPingBtn.setOnClickListener(this);
+        binding.cancelPingBtn.setOnClickListener(this);
         pingViewModel = new ViewModelProvider(this).get(PingViewModel.class);
         subscribeUI();
         return binding.getRoot();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.i(TAG, "onCreate: ");
+        super.onCreate(savedInstanceState);
     }
 
     private void subscribeUI() {
@@ -66,6 +74,42 @@ public class PingFragment extends Fragment implements View.OnClickListener {
             }
             return handled;
         });
+        pingViewModel.getPingState().observe(getViewLifecycleOwner(), pingState -> {
+            switch (pingState) {
+                case NORMAL:
+                    binding.pingEntryLayout.setVisibility(View.VISIBLE);
+                    binding.topLabel.setVisibility(View.GONE);
+                    binding.solidPingBtn.setText("Send Ping");
+                    binding.solidPingBtn.setClickable(true);
+                    binding.cancelPingBtn.setVisibility(View.GONE);
+                    break;
+                case AWAITING_RESPONSE:
+                    binding.pingEntryLayout.setVisibility(View.GONE);
+                    binding.topLabel.setVisibility(View.VISIBLE);
+                    binding.topLabel.setText("Awaiting a response...");
+                    binding.solidPingBtn.setText("Pinging...");
+                    binding.solidPingBtn.setClickable(false);
+                    binding.cancelPingBtn.setVisibility(View.VISIBLE);
+                    break;
+                case GOT_RESPONSE:
+                    binding.pingEntryLayout.setVisibility(View.GONE);
+                    binding.topLabel.setVisibility(View.VISIBLE);
+                    binding.topLabel.setText("Initializing...");
+                    binding.solidPingBtn.setText("Start chat");
+                    binding.solidPingBtn.setClickable(true);
+                    binding.cancelPingBtn.setVisibility(View.VISIBLE);
+                    break;
+                case ACTIVE_CHAT:
+                    binding.pingEntryLayout.setVisibility(View.GONE);
+                    binding.topLabel.setVisibility(View.VISIBLE);
+                    binding.topLabel.setText("Active chat");
+                    binding.solidPingBtn.setText("Resume chat");
+                    binding.solidPingBtn.setClickable(true);
+                    binding.cancelPingBtn.setVisibility(View.VISIBLE);
+                    break;
+            }
+            Log.i(TAG, "subscribeUI: " + pingState);
+        });
     }
 
     public static void hideKeyboardFrom(Context context, View view) {
@@ -83,11 +127,16 @@ public class PingFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.sendPingBtn:
-                binding.messageEntry.onEditorAction(EditorInfo.IME_ACTION_DONE);
+            case R.id.solidPingBtn:
+                if (((Button) v).getText().toString().contains("Send Ping")) {
+                    binding.messageEntry.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                } else {
+                    showChat("id");
+                }
                 break;
-            case R.id.callAmbulanceBtn:
-                Toast.makeText(getActivity(), "Calling Ambulance", Toast.LENGTH_SHORT).show();
+            case R.id.cancelPingBtn:
+                //pingViewModel.getPingState().postValue(PingViewModel.PingState.NORMAL);
+                ((HealthApp) requireActivity().getApplication()).getSocketManager().destroy();
                 break;
         }
     }
@@ -95,7 +144,8 @@ public class PingFragment extends Fragment implements View.OnClickListener {
     private void showChat(String pingID) {
         Intent myIntent = new Intent(requireActivity(), FullscreenActivity.class);
         if (user != null && user.isAuthenticated()) {
-            myIntent.putExtra("pingID", user);
+            myIntent.putExtra("pingID", pingID);
+            myIntent.putExtra("token", user.getToken());
             myIntent.putExtra("motive", AppRepository.PINGCHAT);
         }
         requireActivity().startActivity(myIntent);
@@ -109,28 +159,16 @@ public class PingFragment extends Fragment implements View.OnClickListener {
                         new ApiCallbacks.Ping() {
                     @Override
                     public void onPingStarted() {
-                        binding.pingEntryLayout.setVisibility(View.GONE);
-                        binding.awaitingResponseTV.setVisibility(View.VISIBLE);
-                        binding.sendPingBtn.setText("Pinging...");
-                        binding.cancelPingBtn.setVisibility(View.VISIBLE);
-                        binding.sendPingBtn.setClickable(false);
+                        pingViewModel.getPingState().postValue(PingViewModel.PingState.AWAITING_RESPONSE);
                     }
                     @Override
                     public void onPingSuccess(PingBody.Response pingResponse) {
-                        pingViewModel.startTimer(180);
-                        binding.sendPingBtn.setText("Sent Ping");
-                        binding.cancelPingBtn.setVisibility(View.VISIBLE);
-                        binding.sendPingBtn.setClickable(false);
                         showChat(pingResponse.getData().getId());
                         Toast.makeText(getContext(), pingResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     @Override
                     public void onPingFailure(String message) {
-                        binding.pingEntryLayout.setVisibility(View.VISIBLE);
-                        binding.awaitingResponseTV.setVisibility(View.GONE);
-                        binding.sendPingBtn.setText("Send Ping");
-                        binding.cancelPingBtn.setVisibility(View.GONE);
-                        binding.sendPingBtn.setClickable(true);
+                        pingViewModel.getPingState().postValue(PingViewModel.PingState.NORMAL);
                         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
                     }
                 });

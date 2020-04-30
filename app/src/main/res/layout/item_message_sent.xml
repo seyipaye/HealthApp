@@ -24,8 +24,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/chat_item_sent_bg"
-        android:textColor="@color/top_text_color"
+        android:fontFamily="@font/open_sans"
         android:padding="16dp"
         android:text="How are you doing?
-        This is a long message that should probably wrap." />
+        This is a long message that should probably wrap."
+        android:textColor="@color/top_text_color"
+        android:textSize="14sp" />
 </LinearLayout>
