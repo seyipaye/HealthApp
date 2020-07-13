@@ -18,7 +18,7 @@ In this code base, you will find the code that connect the users to the system
 
 The code is written in Java
 
-We are committed to improving the project beyond what we have at submission for the Solutions challenge. Hence, new code will be pushed to the  **staging**.
+We are committed to improving the project beyond what we have now. Hence, new code will be pushed to the  **staging**.
 
 ### What You Will Find in Health App
 
